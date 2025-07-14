@@ -23,4 +23,3 @@ rootProject.name = "SDUI-android-25"
 include(":app")
 include(":data")
 include(":domain")
-include(":features:home")

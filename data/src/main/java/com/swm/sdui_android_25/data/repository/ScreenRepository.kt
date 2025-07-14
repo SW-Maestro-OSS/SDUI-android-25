@@ -1,5 +1,6 @@
 package com.swm.sdui_android_25.data.repository
 
+import com.swm.sdui_android_25.data.ScreenResponseDto
 import com.swm.sdui_android_25.data.api.ApiService
 import com.swm.sdui_android_25.data.network.NetworkModule
 import kotlinx.coroutines.Dispatchers
@@ -8,7 +9,7 @@ import kotlinx.coroutines.withContext
 class ScreenRepository {
     private val apiService: ApiService = NetworkModule.provideApiService()
     
-    suspend fun getHome1Screen(): Result<String> {
+    suspend fun getHome1Screen(): Result<ScreenResponseDto> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getHome1()
@@ -23,7 +24,7 @@ class ScreenRepository {
         }
     }
     
-    suspend fun getHome2Screen(): Result<String> {
+    suspend fun getHome2Screen(): Result<ScreenResponseDto> {
         return withContext(Dispatchers.IO) {
             try {
                 val response = apiService.getHome2()
