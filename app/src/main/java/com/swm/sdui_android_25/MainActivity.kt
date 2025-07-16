@@ -5,31 +5,31 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.lifecycleScope
+import com.swm.sdui_android_25.data.ScreenMapper
+import com.swm.sdui_android_25.data.ScreenRepositoryImpl
+import com.swm.sdui_android_25.data.network.NetworkModule
 import com.swm.sdui_android_25.data.repository.ScreenRepository
+import com.swm.sdui_android_25.domain.model.ActionType
+import com.swm.sdui_android_25.domain.model.Screen
 import com.swm.sdui_android_25.ui.theme.SDUIandroid25Theme
 import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     private val screenRepository = ScreenRepository()
-    
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
             SDUIandroid25Theme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    JsonViewerScreen(
-                        screenRepository = screenRepository,
-                        modifier = Modifier.padding(innerPadding)
+                    SDUITestScreen(
+                        modifier = Modifier.padding(innerPadding),
                     )
                 }
             }
@@ -37,109 +37,108 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun JsonViewerScreen(
-    screenRepository: ScreenRepository,
-    modifier: Modifier = Modifier
-) {
-    var jsonResponse by remember { mutableStateOf("버튼을 클릭하여 JSON 응답을 확인하세요.") }
+fun SDUITestScreen(modifier: Modifier) {
+    var currentScreen by remember { mutableStateOf<Screen?>(null) }
     var isLoading by remember { mutableStateOf(false) }
-    
+    var error by remember { mutableStateOf<String?>(null) }
+
+    val screenRepository =
+        remember {
+            ScreenRepositoryImpl(
+                NetworkModule.provideApiService(),
+                ScreenMapper(),
+            )
+        }
+
+    val coroutineScope = rememberCoroutineScope()
+
     Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(16.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(16.dp),
     ) {
-        // 제목
-        Text(
-            text = "MockWebServer JSON 응답 테스트",
-            style = MaterialTheme.typography.headlineMedium
-        )
-        
-        // 버튼들
         Row(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.fillMaxWidth()
         ) {
             Button(
                 onClick = {
                     isLoading = true
-                    kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-                        screenRepository.getHome1Screen()
-                            .onSuccess { response ->
-                                jsonResponse = response
+                    error = null
+                    coroutineScope.launch {
+                        screenRepository
+                            .getScreen("home1")
+                            .onSuccess { screen ->
+                                currentScreen = screen
                                 isLoading = false
-                            }
-                            .onFailure { exception ->
-                                jsonResponse = "Error: ${exception.message}"
+                            }.onFailure { exception ->
+                                error = exception.message
                                 isLoading = false
                             }
                     }
                 },
-                enabled = !isLoading,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
-                Text("Home1 요청")
+                Text("Home1 SDUI")
             }
-            
+
             Button(
                 onClick = {
                     isLoading = true
-                    kotlinx.coroutines.CoroutineScope(kotlinx.coroutines.Dispatchers.Main).launch {
-                        screenRepository.getHome2Screen()
-                            .onSuccess { response ->
-                                jsonResponse = response
+                    error = null
+                    coroutineScope.launch {
+                        screenRepository
+                            .getScreen("home2")
+                            .onSuccess { screen ->
+                                currentScreen = screen
                                 isLoading = false
-                            }
-                            .onFailure { exception ->
-                                jsonResponse = "Error: ${exception.message}"
+                            }.onFailure { exception ->
+                                error = exception.message
                                 isLoading = false
                             }
                     }
                 },
-                enabled = !isLoading,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             ) {
-                Text("Home2 요청")
+                Text("Home2 SDUI")
             }
         }
-        
-        // 로딩 표시
-        if (isLoading) {
-            Box(
-                modifier = Modifier.fillMaxWidth(),
-                contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        when {
+            isLoading -> {
+                Box(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
+                }
             }
-        }
-        
-        // JSON 응답 표시 영역
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f)
-        ) {
-            Column(
-                modifier = Modifier.padding(12.dp)
-            ) {
+
+            error != null -> {
                 Text(
-                    text = "JSON 응답:",
-                    style = MaterialTheme.typography.titleMedium
+                    text = "Error: $error",
+                    color = MaterialTheme.colorScheme.error,
                 )
-                
-                Spacer(modifier = Modifier.height(8.dp))
-                
-                Text(
-                    text = jsonResponse,
-                    fontFamily = FontFamily.Monospace,
-                    style = MaterialTheme.typography.bodySmall,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .verticalScroll(rememberScrollState())
-                )
+            }
+
+            currentScreen != null -> {
+                Card {
+                    SDUIRenderer(
+                        screen = currentScreen!!,
+                        onAction = { action ->
+                            if (action.type == ActionType.TOAST) {
+                                // 토스트 표시 로직
+                            }
+                        },
+                    )
+                }
+            }
+
+            else -> {
+                Text("버튼을 클릭하여 SDUI를 테스트하세요.")
             }
         }
     }

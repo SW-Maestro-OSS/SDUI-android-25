@@ -10,8 +10,8 @@ class MockWebServerManager {
     
     fun start(): String {
         mockWebServer.dispatcher = object : Dispatcher() {
-            override fun dispatch(request: RecordedRequest): MockResponse {
-                return when (request.path) {
+            override fun dispatch(request: RecordedRequest): MockResponse =
+                when (request.path) {
                     "/home1" -> MockResponse()
                         .setResponseCode(200)
                         .setBody(getHome1Response())
@@ -27,8 +27,7 @@ class MockWebServerManager {
                         .setBody("Not Found")
                 }
             }
-        }
-        
+
         mockWebServer.start()
         return mockWebServer.url("/").toString()
     }
@@ -36,58 +35,56 @@ class MockWebServerManager {
     fun stop() {
         mockWebServer.shutdown()
     }
-    
-    private fun getHome1Response(): String {
-        return """
-            {
-              "screen": {
-                "id": "test_screen",
-                "title": "테스트 화면",
-                "components": [
-                  {
-                    "type": "Text",
-                    "id": "greeting_text",
-                    "text": "안녕하세요, 서버 드리븐 UI!"
-                  },
-                  {
-                    "type": "Button",
-                    "id": "click_button",
-                    "text": "클릭해 주세요",
-                    "action": {
-                      "type": "toast",
-                      "message": "버튼이 클릭되었습니다!"
-                    }
-                  }
-                ]
+
+    private fun getHome1Response(): String =
+        """
+        {
+          "screen": {
+            "id": "test_screen",
+            "title": "테스트 화면",
+            "components": [
+              {
+                "type": "Text",
+                "id": "greeting_text",
+                "text": "안녕하세요, 서버 드리븐 UI!1"
+              },
+              {
+                "type": "Button",
+                "id": "click_button",
+                "text": "클릭해 주세요",
+                "action": {
+                  "type": "toast",
+                  "message": "버튼이 클릭되었습니다!"
+                }
               }
-            }
+            ]
+          }
+        }
         """.trimIndent()
-    }
-    
-    private fun getHome2Response(): String {
-        return """
-            {
-              "screen": {
-                "id": "test_screen",
-                "title": "테스트 화면",
-                "components": [
-                  {
-                    "type": "Button",
-                    "id": "click_button",
-                    "text": "클릭해 주세요",
-                    "action": {
-                      "type": "toast",
-                      "message": "버튼이 클릭되었습니다!"
-                    }
-                  },
-                  {
-                    "type": "Text",
-                    "id": "greeting_text",
-                    "text": "안녕하세요, 서버 드리븐 UI!2"
-                  }
-                ]
+
+    private fun getHome2Response(): String =
+        """
+        {
+          "screen": {
+            "id": "test_screen",
+            "title": "테스트 화면",
+            "components": [
+              {
+                "type": "Button",
+                "id": "click_button",
+                "text": "클릭해 주세요",
+                "action": {
+                  "type": "toast",
+                  "message": "버튼이 클릭되었습니다!"
+                }
+              },
+              {
+                "type": "Text",
+                "id": "greeting_text",
+                "text": "안녕하세요, 서버 드리븐 UI!2"
               }
-            }
+            ]
+          }
+        }
         """.trimIndent()
-    }
 } 

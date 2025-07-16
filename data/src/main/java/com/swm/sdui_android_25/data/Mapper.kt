@@ -7,27 +7,26 @@ import com.swm.sdui_android_25.domain.model.ComponentType
 import com.swm.sdui_android_25.domain.model.Screen
 
 class ScreenMapper {
-    fun toDomain(dto: ScreenResponseDto): Screen {
-        return Screen(
+    fun toDomain(dto: ScreenResponseDto): Screen =
+        Screen(
             id = dto.screen.id,
             title = dto.screen.title,
-            components = dto.screen.components.map { ComponentMapper().toDomain(it) }
+            components = dto.screen.components.map { ComponentMapper().toDomain(it) },
         )
-    }
-    fun toDto(domain: Screen): ScreenResponseDto {
-        return ScreenResponseDto(
+
+    fun toDto(domain: Screen): ScreenResponseDto =
+        ScreenResponseDto(
             screen = ScreenDto(
                 id = domain.id,
                 title = domain.title,
-                components = domain.components.map { ComponentMapper().toDto(it) }
+                components = domain.components.map { ComponentMapper().toDto(it) },
             )
         )
-    }
 }
 
 class ComponentMapper {
-    fun toDomain(dto: ComponentDto): Component {
-        return Component(
+    fun toDomain(dto: ComponentDto): Component =
+        Component(
             type = ComponentType.valueOf(dto.type.uppercase()),
             id = dto.id,
             text = dto.text,
@@ -39,9 +38,9 @@ class ComponentMapper {
             },
             children = dto.children?.map { toDomain(it) } ?: emptyList()
         )
-    }
-    fun toDto(domain: Component): ComponentDto {
-        return ComponentDto(
+
+    fun toDto(domain: Component): ComponentDto =
+        ComponentDto(
             type = domain.type.name.lowercase(),
             id = domain.id,
             text = domain.text,
@@ -55,5 +54,4 @@ class ComponentMapper {
                 domain.children.map { toDto(it) }
             } else null
         )
-    }
 }
