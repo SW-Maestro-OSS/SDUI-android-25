@@ -1,6 +1,10 @@
 # SDUI-android-25
 Server Driven UI 학습을 위한 레포지토리입니다.
 
+# 질문
+1. modifier같은 것들 하나하나 data class로 만들어야 하나요?
+   - 속성이 되게 많은데 이런 것들을 하나하나 data class로 만들어야 하는지 궁금합니다. map으로 처리할 수도 있을 것 같은데, 어떤 방식이 더 좋을까요?
+
 # 예시 JSON
 ```json
 {

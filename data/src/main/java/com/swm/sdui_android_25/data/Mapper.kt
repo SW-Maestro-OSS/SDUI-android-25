@@ -25,7 +25,7 @@ class ScreenMapper {
 }
 
 class ComponentMapper {
-    fun toDomain(dto: ComponentDto): Component =
+    fun toDomain(dto: OldComponentDto): Component =
         Component(
             type = ComponentType.valueOf(dto.type.uppercase()),
             id = dto.id,
@@ -39,8 +39,8 @@ class ComponentMapper {
             children = dto.children?.map { toDomain(it) } ?: emptyList()
         )
 
-    fun toDto(domain: Component): ComponentDto =
-        ComponentDto(
+    fun toDto(domain: Component): OldComponentDto =
+        OldComponentDto(
             type = domain.type.name.lowercase(),
             id = domain.id,
             text = domain.text,
