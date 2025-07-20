@@ -1,5 +1,12 @@
 package com.swm.sdui_android_25.data.network
 
+import com.google.gson.GsonBuilder
+import com.swm.sdui_android_25.data.ActionType
+import com.swm.sdui_android_25.data.ActionTypeAdapter
+import com.swm.sdui_android_25.data.ComponentSpec
+import com.swm.sdui_android_25.data.FONT_WEIGHT
+import com.swm.sdui_android_25.data.FontWeightAdapter
+import com.swm.sdui_android_25.data.ViewAdapter
 import com.swm.sdui_android_25.data.api.ApiService
 import com.swm.sdui_android_25.data.mock.MockWebServerManager
 import kotlinx.coroutines.Dispatchers
@@ -22,7 +29,14 @@ object NetworkModule {
         .readTimeout(30, TimeUnit.SECONDS)
         .build()
     
+    private val gson = GsonBuilder()
+        .registerTypeAdapter(ComponentSpec::class.java, ViewAdapter())
+        .registerTypeAdapter(FONT_WEIGHT::class.java, FontWeightAdapter())
+        .registerTypeAdapter(ActionType::class.java, ActionTypeAdapter())
+        .create()
+    
     fun provideApiService(): ApiService {
+
         if (apiService == null) {
             synchronized(this) {
                 if (apiService == null) {
@@ -30,13 +44,13 @@ object NetworkModule {
                     val baseUrl = runBlocking(Dispatchers.IO) {
                         mockWebServerManager!!.start()
                     }
-                    
+
                     val retrofit = Retrofit.Builder()
                         .baseUrl(baseUrl)
                         .client(okHttpClient)
-                        .addConverterFactory(GsonConverterFactory.create())
+                        .addConverterFactory(GsonConverterFactory.create(gson))
                         .build()
-                    
+
                     apiService = retrofit.create(ApiService::class.java)
                 }
             }

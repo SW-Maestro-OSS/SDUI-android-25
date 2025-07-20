@@ -7,7 +7,7 @@ data class ScreenResponseDto(
 data class ScreenDto(
     val id: String,
     val title: String,
-    val components: List<OldComponentDto>,
+    val components: List<ComponentSpec>,
 )
 
 data class OldComponentDto(
@@ -29,27 +29,38 @@ data class ModifierSpec(
     val elevation: Int? = null,
 )
 
+enum class ComponentType {
+    SPACER,
+    TEXT,
+    BUTTON,
+    IMAGE,
+    CARD,
+    COLUMN,
+    ROW,
+    UNKNOWN,
+}
+
 sealed interface ComponentSpec {
     val id: String
-    val type: String
+    val type: ComponentType
     val modifierSpec: ModifierSpec? get() = null
 }
 
 data class SpacerComponentDto(
     override val id: String,
-    override val type: String = "Spacer",
+    override val type: ComponentType = ComponentType.SPACER,
 ) : ComponentSpec
 
 
-enum class FONT_WEIGHT {
+enum class FONT_WEIGHT() {
     MEDIUM,
     BOLD,
 }
 
 data class TextComponentDto(
     override val id: String,
-    override val type: String = "Text",
-    val text: String,
+    override val type: ComponentType = ComponentType.TEXT,
+    val text: String = "",
     val fontSize: Int = 16,
     val fontWeight: FONT_WEIGHT = FONT_WEIGHT.MEDIUM,
 ) : ComponentSpec
@@ -67,7 +78,7 @@ data class ActionSpec(
 
 data class ButtonComponentDto(
     override val id: String,
-    override val type: String = "Button",
+    override val type: ComponentType = ComponentType.BUTTON,
     val text: String? = null,
     val action: ActionSpec? = null,
 ) : ComponentSpec
@@ -76,7 +87,7 @@ data class ButtonComponentDto(
 
 data class ImageComponentDto(
     override val id: String,
-    override val type: String = "Image",
+    override val type: ComponentType = ComponentType.IMAGE,
     val url: String,
     val contentDescription: String?,
 ) : ComponentSpec
@@ -87,18 +98,18 @@ sealed interface ContainerSpec : ComponentSpec {
 
 data class CardComponentDto(
     override val id: String,
-    override val type: String = "Card",
+    override val type: ComponentType = ComponentType.CARD,
     override val children: List<ComponentSpec> = emptyList(),
 ) : ContainerSpec
 
 data class ColumnComponentDto(
     override val id: String,
-    override val type: String = "Column",
+    override val type: ComponentType = ComponentType.COLUMN,
     override val children: List<ComponentSpec> = emptyList(),
 ) : ContainerSpec
 
 data class RowComponentDto(
     override val id: String,
-    override val type: String = "Row",
+    override val type: ComponentType = ComponentType.ROW,
     override val children: List<ComponentSpec> = emptyList(),
 ) : ContainerSpec
