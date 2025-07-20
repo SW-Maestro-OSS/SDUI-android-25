@@ -49,6 +49,7 @@ sealed interface ComponentSpec {
 data class SpacerComponentDto(
     override val id: String,
     override val type: ComponentType = ComponentType.SPACER,
+    override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
 
 
@@ -63,6 +64,7 @@ data class TextComponentDto(
     val text: String = "",
     val fontSize: Int = 16,
     val fontWeight: FONT_WEIGHT = FONT_WEIGHT.MEDIUM,
+    override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
 
 enum class ActionType {
@@ -81,6 +83,7 @@ data class ButtonComponentDto(
     override val type: ComponentType = ComponentType.BUTTON,
     val text: String? = null,
     val action: ActionSpec? = null,
+    override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
 
 
@@ -90,6 +93,7 @@ data class ImageComponentDto(
     override val type: ComponentType = ComponentType.IMAGE,
     val url: String,
     val contentDescription: String?,
+    override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
 
 sealed interface ContainerSpec : ComponentSpec {
@@ -100,16 +104,19 @@ data class CardComponentDto(
     override val id: String,
     override val type: ComponentType = ComponentType.CARD,
     override val children: List<ComponentSpec> = emptyList(),
+    override val modifierSpec: ModifierSpec? = null,
 ) : ContainerSpec
 
 data class ColumnComponentDto(
     override val id: String,
     override val type: ComponentType = ComponentType.COLUMN,
     override val children: List<ComponentSpec> = emptyList(),
+    override val modifierSpec: ModifierSpec? = null,
 ) : ContainerSpec
 
 data class RowComponentDto(
     override val id: String,
     override val type: ComponentType = ComponentType.ROW,
     override val children: List<ComponentSpec> = emptyList(),
+    override val modifierSpec: ModifierSpec? = null,
 ) : ContainerSpec

@@ -53,6 +53,9 @@ dependencies {
     // Gson for JSON formatting
     implementation(libs.gson)
     
+    // Coil for image loading
+    implementation(libs.coil.compose)
+    
     // Module dependencies
     implementation(project(":data"))
     implementation(project(":domain"))
