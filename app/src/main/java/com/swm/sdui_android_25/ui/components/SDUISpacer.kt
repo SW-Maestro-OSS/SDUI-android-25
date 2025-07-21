@@ -6,7 +6,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.swm.sdui_android_25.data.SpacerComponentDto
+import com.swm.sdui_android_25.domain.model.SpacerComponentDto
 
 @Composable
 fun SDUISpacer(

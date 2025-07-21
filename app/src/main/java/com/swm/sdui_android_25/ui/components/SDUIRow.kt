@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.swm.sdui_android_25.data.RowComponentDto
+import com.swm.sdui_android_25.domain.model.RowComponentDto
 import com.swm.sdui_android_25.RenderComponent
 
 @Composable

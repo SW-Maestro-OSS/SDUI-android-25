@@ -1,25 +1,22 @@
 package com.swm.sdui_android_25.data
 
 import com.swm.sdui_android_25.data.api.ApiService
-import com.swm.sdui_android_25.domain.model.Screen
-import com.swm.sdui_android_25.domain.repository.ScreenRepository
+import com.swm.sdui_android_25.domain.model.ScreenResponseDto
+import com.swm.sdui_android_25.domain.repository.SduiRepository
 
-class ScreenRepositoryImpl(
-    private val apiService: ApiService,
-    private val mapper: ScreenMapper
-) : ScreenRepository {
+class SduiRepositoryImpl(
+    private val apiService: ApiService
+) : SduiRepository {
 
-    override suspend fun getScreen(screenId: String): Result<Screen> {
+    override suspend fun getScreen(screenId: String): Result<ScreenResponseDto> {
         return try {
             val response = when (screenId) {
-                "home1" -> apiService.getHome1()
-                "home2" -> apiService.getHome2()
+                "home" -> apiService.getHome()
                 else -> throw IllegalArgumentException("Unknown screen: $screenId")
             }
 
             if (response.isSuccessful && response.body() != null) {
-                val screen = mapper.toDomain(response.body()!!)
-                Result.success(screen)
+                Result.success(response.body()!!)
             } else {
                 Result.failure(Exception("API Error: ${response.code()}"))
             }

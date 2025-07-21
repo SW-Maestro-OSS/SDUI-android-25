@@ -12,15 +12,15 @@ class MockWebServerManager {
         mockWebServer.dispatcher = object : Dispatcher() {
             override fun dispatch(request: RecordedRequest): MockResponse =
                 when (request.path) {
-                    "/home1" -> MockResponse()
+                    "/home" -> MockResponse()
                         .setResponseCode(200)
-                        .setBody(getHome1Response())
+                        .setBody(getHomeResponse())
                         .addHeader("Content-Type", "application/json")
-                    
-                    "/home2" -> MockResponse()
-                        .setResponseCode(200)
-                        .setBody(getHome2Response())
-                        .addHeader("Content-Type", "application/json")
+//
+//                    "/home2" -> MockResponse()
+//                        .setResponseCode(200)
+//                        .setBody(getHome2Response())
+//                        .addHeader("Content-Type", "application/json")
                     
                     else -> MockResponse()
                         .setResponseCode(404)
@@ -36,59 +36,7 @@ class MockWebServerManager {
         mockWebServer.shutdown()
     }
 
-    private fun getHome1Response(): String =
-        """
-        {
-          "screen": {
-            "id": "test_screen",
-            "title": "테스트 화면",
-            "components": [
-              {
-                "type": "Text",
-                "id": "greeting_text",
-                "text": "안녕하세요, 서버 드리븐 UI!1"
-              },
-              {
-                "type": "Button",
-                "id": "click_button",
-                "text": "클릭해 주세요",
-                "action": {
-                  "type": "toast",
-                  "message": "버튼이 클릭되었습니다!"
-                }
-              }
-            ]
-          }
-        }
-        """.trimIndent()
-
-    private fun getHome2Response(): String =
-        """
-        {
-          "screen": {
-            "id": "test_screen",
-            "title": "테스트 화면",
-            "components": [
-              {
-                "type": "Button",
-                "id": "click_button",
-                "text": "클릭해 주세요",
-                "action": {
-                  "type": "toast",
-                  "message": "버튼이 클릭되었습니다!"
-                }
-              },
-              {
-                "type": "Text",
-                "id": "greeting_text",
-                "text": "안녕하세요, 서버 드리븐 UI!2"
-              }
-            ]
-          }
-        }
-        """.trimIndent()
-
-    private fun getHomeAdvancedResponse(): String =
+    private fun getHomeResponse(): String =
         """
         {
           "screen": {

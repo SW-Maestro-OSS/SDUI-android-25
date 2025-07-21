@@ -1,57 +1,19 @@
-package com.swm.sdui_android_25.data
+package com.swm.sdui_android_25.data.mapper
 
-import com.swm.sdui_android_25.domain.model.Action
-import com.swm.sdui_android_25.domain.model.ActionType
-import com.swm.sdui_android_25.domain.model.Component
-import com.swm.sdui_android_25.domain.model.ComponentType
-import com.swm.sdui_android_25.domain.model.Screen
+import com.swm.sdui_android_25.domain.model.ScreenResponseDto
+import com.swm.sdui_android_25.data.network.GsonProvider
 
 class ScreenMapper {
-    fun toDomain(dto: ScreenResponseDto): Screen =
-        Screen(
-            id = dto.screen.id,
-            title = dto.screen.title,
-            components = dto.screen.components.map { ComponentMapper().toDomain(it) },
-        )
 
-    fun toDto(domain: Screen): ScreenResponseDto =
-        ScreenResponseDto(
-            screen = ScreenDto(
-                id = domain.id,
-                title = domain.title,
-                components = domain.components.map { ComponentMapper().toDto(it) },
-            )
-        )
-}
+    fun fromJson(json: String): ScreenResponseDto {
+        return try {
+            GsonProvider.gson.fromJson(json, ScreenResponseDto::class.java)
+        } catch (e: Exception) {
+            throw Exception("Failed to parse screen JSON: ${e.message}", e)
+        }
+    }
 
-class ComponentMapper {
-    fun toDomain(dto: OldComponentDto): Component =
-        Component(
-            type = ComponentType.valueOf(dto.type.uppercase()),
-            id = dto.id,
-            text = dto.text,
-            action = dto.action?.let {
-                Action(
-                    type = ActionType.valueOf(it.type.uppercase()),
-                    message = it.message
-                )
-            },
-            children = dto.children?.map { toDomain(it) } ?: emptyList()
-        )
-
-    fun toDto(domain: Component): OldComponentDto =
-        OldComponentDto(
-            type = domain.type.name.lowercase(),
-            id = domain.id,
-            text = domain.text,
-            action = domain.action?.let {
-                ActionDto(
-                    type = it.type.name.lowercase(),
-                    message = it.message
-                )
-            },
-            children = if (domain.children.isNotEmpty()) {
-                domain.children.map { toDto(it) }
-            } else null
-        )
+    fun toJson(screenResponse: ScreenResponseDto): String {
+        return GsonProvider.gson.toJson(screenResponse)
+    }
 }

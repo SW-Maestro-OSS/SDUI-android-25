@@ -4,6 +4,7 @@ import com.google.gson.JsonDeserializationContext
 import com.google.gson.JsonDeserializer
 import com.google.gson.JsonElement
 import com.google.gson.JsonParseException
+import com.swm.sdui_android_25.domain.model.*
 import java.lang.reflect.Type
 
 class ViewAdapter : JsonDeserializer<ComponentSpec> {

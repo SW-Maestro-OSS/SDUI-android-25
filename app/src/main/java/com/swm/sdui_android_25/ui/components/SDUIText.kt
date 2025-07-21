@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import com.swm.sdui_android_25.data.TextComponentDto
-import com.swm.sdui_android_25.data.FONT_WEIGHT
+import com.swm.sdui_android_25.domain.model.TextComponentDto
+import com.swm.sdui_android_25.domain.model.FONT_WEIGHT
 
 @Composable
 fun SDUIText(
@@ -15,8 +15,8 @@ fun SDUIText(
 ) {
     Text(
         text = component.text,
-        fontSize = component.fontSize.sp,
-        fontWeight = when (component.fontWeight) {
+        fontSize = if (component.fontSize > 0) component.fontSize.sp else 16.sp,
+        fontWeight = when (component.fontWeight ?: FONT_WEIGHT.MEDIUM) {
             FONT_WEIGHT.BOLD -> FontWeight.Bold
             FONT_WEIGHT.MEDIUM -> FontWeight.Medium
         },

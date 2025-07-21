@@ -6,7 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.swm.sdui_android_25.RenderComponent
-import com.swm.sdui_android_25.data.ColumnComponentDto
+import com.swm.sdui_android_25.domain.model.ColumnComponentDto
 import com.swm.sdui_android_25.RenderComponent
 
 @Composable

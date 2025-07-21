@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import android.widget.Toast
-import com.swm.sdui_android_25.data.ButtonComponentDto
-import com.swm.sdui_android_25.data.ActionType
+import com.swm.sdui_android_25.domain.model.ButtonComponentDto
+import com.swm.sdui_android_25.domain.model.ActionType
 
 @Composable
 fun SDUIButton(

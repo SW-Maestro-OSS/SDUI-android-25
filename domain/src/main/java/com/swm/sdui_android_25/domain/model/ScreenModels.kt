@@ -1,4 +1,4 @@
-package com.swm.sdui_android_25.data
+package com.swm.sdui_android_25.domain.model
 
 data class ScreenResponseDto(
     val screen: ScreenDto
@@ -8,19 +8,6 @@ data class ScreenDto(
     val id: String,
     val title: String,
     val components: List<ComponentSpec>,
-)
-
-data class OldComponentDto(
-    val type: String,
-    val id: String,
-    val text: String? = null,
-    val action: ActionDto? = null,
-    val children: List<OldComponentDto>? = null
-)
-
-data class ActionDto(
-    val type: String,
-    val message: String? = null,
 )
 
 data class ModifierSpec(
@@ -52,7 +39,6 @@ data class SpacerComponentDto(
     override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
 
-
 enum class FONT_WEIGHT() {
     MEDIUM,
     BOLD,
@@ -63,7 +49,7 @@ data class TextComponentDto(
     override val type: ComponentType = ComponentType.TEXT,
     val text: String = "",
     val fontSize: Int = 16,
-    val fontWeight: FONT_WEIGHT = FONT_WEIGHT.MEDIUM,
+    val fontWeight: FONT_WEIGHT? = FONT_WEIGHT.MEDIUM,
     override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
 
@@ -85,8 +71,6 @@ data class ButtonComponentDto(
     val action: ActionSpec? = null,
     override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
-
-
 
 data class ImageComponentDto(
     override val id: String,
@@ -119,4 +103,4 @@ data class RowComponentDto(
     override val type: ComponentType = ComponentType.ROW,
     override val children: List<ComponentSpec> = emptyList(),
     override val modifierSpec: ModifierSpec? = null,
-) : ContainerSpec
+) : ContainerSpec 
