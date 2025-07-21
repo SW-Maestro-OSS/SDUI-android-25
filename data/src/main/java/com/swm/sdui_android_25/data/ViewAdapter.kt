@@ -24,7 +24,8 @@ class ViewAdapter : JsonDeserializer<ComponentSpec> {
         val componentType = try {
             ComponentType.valueOf(type)
         } catch (e: IllegalArgumentException) {
-            ComponentType.UNKNOWN // gracefully fallback to UNKNOWN instead of crashing
+            // 알 수 없는 타입은 빈 Spacer로 처리하여 안전하게 렌더링
+            return SpacerComponentDto(id = id, type = ComponentType.SPACER)
         }
 
         return when(componentType) {
@@ -35,10 +36,6 @@ class ViewAdapter : JsonDeserializer<ComponentSpec> {
             ComponentType.CARD -> context.deserialize(json, CardComponentDto::class.java)
             ComponentType.COLUMN -> context.deserialize(json, ColumnComponentDto::class.java)
             ComponentType.ROW -> context.deserialize(json, RowComponentDto::class.java)
-            ComponentType.UNKNOWN -> {
-                // Unknown component types are rendered as empty spacers to avoid crashes
-                SpacerComponentDto(id = id, type = ComponentType.UNKNOWN)
-            }
         }
     }
 }

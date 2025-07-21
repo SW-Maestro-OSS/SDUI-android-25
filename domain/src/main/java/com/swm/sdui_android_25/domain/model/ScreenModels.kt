@@ -24,7 +24,6 @@ enum class ComponentType {
     CARD,
     COLUMN,
     ROW,
-    UNKNOWN,
 }
 
 sealed interface ComponentSpec {
