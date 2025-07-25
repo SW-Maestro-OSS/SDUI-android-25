@@ -61,6 +61,8 @@ enum class ActionType {
 data class ActionSpec(
     val type: ActionType,
     val message: String? = null,
+    val targetScreen: String? = null,  // 네비게이션 대상 화면
+    val parameters: Map<String, Any>? = null,  // 추가 파라미터
 )
 
 data class ButtonComponentDto(
