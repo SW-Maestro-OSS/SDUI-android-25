@@ -96,16 +96,18 @@ fun MainScreen(
                 modifier = Modifier.padding(innerPadding)
             )
             1 -> AScreen(
-                onNavigateToB = { selectedTab = 2 },
-                onNavigateToC = { selectedTab = 3 },
+                screenRepository = screenRepository,
+                screenMapper = screenMapper,
                 modifier = Modifier.padding(innerPadding)
             )
             2 -> BScreen(
-                onNavigateBack = { selectedTab = 0 },
+                screenRepository = screenRepository,
+                screenMapper = screenMapper,
                 modifier = Modifier.padding(innerPadding)
             )
             3 -> CScreen(
-                onNavigateBack = { selectedTab = 0 },
+                screenRepository = screenRepository,
+                screenMapper = screenMapper,
                 modifier = Modifier.padding(innerPadding)
             )
         }
