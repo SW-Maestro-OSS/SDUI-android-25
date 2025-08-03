@@ -52,16 +52,46 @@ data class TextComponentDto(
     override val modifierSpec: ModifierSpec? = null,
 ) : ComponentSpec
 
+// 기존 ActionType enum은 유지
 enum class ActionType {
     TOAST,
     NAVIGATE,
     DIALOG,
 }
 
-data class ActionSpec(
-    val type: ActionType,
-    val message: String? = null,
+// ActionSpec을 sealed interface로 변경
+sealed interface ActionSpec {
+    val type: ActionType
+}
+
+// TOAST 액션
+data class ToastActionSpec(
+    override val type: ActionType = ActionType.TOAST,
+    val message: String
+) : ActionSpec
+
+// NAVIGATE 액션
+data class NavigateActionSpec(
+    override val type: ActionType = ActionType.NAVIGATE,
+    val targetScreen: String,
+    val parameters: Map<String, Any>? = null
+) : ActionSpec
+
+// 다이얼로그 버튼 스펙
+data class DialogButtonSpec(
+    val text: String,
+    val action: ActionSpec? = null,
+    val isDismiss: Boolean = false
 )
+
+// DIALOG 액션
+data class DialogActionSpec(
+    override val type: ActionType = ActionType.DIALOG,
+    val title: String,
+    val message: String,
+    val buttons: List<DialogButtonSpec> = emptyList(),
+    val isDismissible: Boolean = true
+) : ActionSpec
 
 data class ButtonComponentDto(
     override val id: String,

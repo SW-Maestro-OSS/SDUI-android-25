@@ -12,6 +12,9 @@ class SduiRepositoryImpl(
         return try {
             val response = when (screenId) {
                 "home" -> apiService.getHome()
+                "ascreen_sdui" -> apiService.getAScreen()
+                "bscreen_sdui" -> apiService.getBScreen()
+                "cscreen_sdui" -> apiService.getCScreen()
                 else -> throw IllegalArgumentException("Unknown screen: $screenId")
             }
 
